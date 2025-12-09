@@ -61,7 +61,7 @@ Click **"Advanced"** and add these environment variables:
    - Example: `mongodb+srv://username:password@cluster.mongodb.net/odisha-jobs?retryWrites=true&w=majority`
 
 4. **YOUTUBE_API_KEY**
-   - Value: `AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY`
+   - Value: `your_youtube_api_key_here`
 
 5. **JWT_SECRET**
    - Value: Any random string (e.g., `odisha_jobs_super_secret_key_2025`)

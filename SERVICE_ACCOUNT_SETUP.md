@@ -4,7 +4,7 @@
 
 ```javascript
 Project ID: gobindatest-9a5ca
-API Key: AIzaSyDaQ01SM-tN4SnOae6MRxSUbBGWqjFNrAM
+API Key: your_firebase_api_key_here
 Storage Bucket: gobindatest-9a5ca.firebasestorage.app
 ```
 
@@ -78,7 +78,7 @@ OPENAI_API_KEY=your_openai_api_key
 OPENAI_MODEL=gpt-4-turbo-preview
 
 # YouTube Data API
-YOUTUBE_API_KEY=AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY
+YOUTUBE_API_KEY=your_youtube_api_key_here
 
 # JWT Authentication
 JWT_SECRET=odisha_jobs_super_secret_2025
@@ -164,7 +164,7 @@ Render Dashboard → Service → Environment → Add Environment Variable
 | `NODE_ENV` | `production` | Required |
 | `PORT` | `5000` | Required |
 | `FIREBASE_SERVICE_ACCOUNT` | `{...json...}` | ⚠️ Most Important! |
-| `YOUTUBE_API_KEY` | `AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY` | Already have |
+| `YOUTUBE_API_KEY` | `your_youtube_api_key_here` | Get from Google Cloud Console |
 | `JWT_SECRET` | `odisha_jobs_secret_2025` | Any random string |
 | `GEMINI_API_KEY` | `your-key` | Get from Google AI Studio |
 

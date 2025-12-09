@@ -48,7 +48,7 @@
 5. Add Environment Variables:
    - NODE_ENV=production
    - MONGODB_URI=<paste-from-step-1>
-   - YOUTUBE_API_KEY=AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY
+   - YOUTUBE_API_KEY=your_youtube_api_key_here
    - GEMINI_API_KEY=<paste-from-step-2>
    - JWT_SECRET=random_secret_123
 6. Create Web Service

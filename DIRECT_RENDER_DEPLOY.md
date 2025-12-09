@@ -102,7 +102,7 @@ Value: {paste your single-line JSON here}
 
 #### 4. YOUTUBE_API_KEY
 ```
-Value: AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY
+Value: your_youtube_api_key_here
 ```
 
 #### 5. JWT_SECRET

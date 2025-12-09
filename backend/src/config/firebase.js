@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDaQ01SM-tN4SnOae6MRxSUbBGWqjFNrAM",
+  apiKey: process.env.FIREBASE_API_KEY || "your_firebase_api_key_here",
   authDomain: "gobindatest-9a5ca.firebaseapp.com",
   projectId: "gobindatest-9a5ca",
   storageBucket: "gobindatest-9a5ca.firebasestorage.app",

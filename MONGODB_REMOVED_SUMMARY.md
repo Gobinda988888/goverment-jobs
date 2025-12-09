@@ -63,7 +63,7 @@ Expected output:
 NODE_ENV=production
 PORT=5000
 FIREBASE_SERVICE_ACCOUNT={...your-json...}
-YOUTUBE_API_KEY=AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY
+YOUTUBE_API_KEY=your_youtube_api_key_here
 JWT_SECRET=odisha_jobs_secret_2025
 GEMINI_API_KEY=your-gemini-key (या OPENAI_API_KEY)
 ```

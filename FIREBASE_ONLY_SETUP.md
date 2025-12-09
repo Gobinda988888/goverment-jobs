@@ -74,7 +74,7 @@ OPENAI_API_KEY=your_openai_api_key_here
 GEMINI_API_KEY=your_gemini_api_key_here
 
 # YouTube Data API
-YOUTUBE_API_KEY=AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY
+YOUTUBE_API_KEY=your_youtube_api_key_here
 
 # Firebase Configuration (REQUIRED!)
 FIREBASE_SERVICE_ACCOUNT={"type":"service_account","project_id":"gobindatest-9a5ca",...paste-your-entire-json-here...}
@@ -148,7 +148,7 @@ Render Dashboard में ये variables add करें:
 
 4. **YOUTUBE_API_KEY**
    ```
-   Value: AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY
+   Value: your_youtube_api_key_here
    ```
 
 5. **JWT_SECRET**

@@ -57,7 +57,7 @@ Follow: `RENDER_DEPLOYMENT.md`
 4. Add environment variables:
    - `MONGODB_URI` (from MongoDB Atlas)
    - `OPENAI_API_KEY` or `GEMINI_API_KEY`
-   - `YOUTUBE_API_KEY=AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY`
+   - `YOUTUBE_API_KEY=your_youtube_api_key_here`
    - `JWT_SECRET` (any random string)
    - `NODE_ENV=production`
 5. Deploy!
@@ -164,7 +164,7 @@ tosi/
 |---------|--------|---------|
 | Firebase Project | ✅ Configured | `gobindatest-9a5ca` |
 | Firebase Storage | ✅ Ready | `gobindatest-9a5ca.firebasestorage.app` |
-| YouTube API | ✅ Ready | `AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY` |
+| YouTube API | ⚠️ Required | `Get from Google Cloud Console` |
 | GitHub Repo | ✅ Pushed | `github.com/Gobinda988888/goverment-jobs` |
 | MongoDB | ⬜ Need to setup | - |
 | AI Service | ⬜ Need API key | OpenAI or Gemini |

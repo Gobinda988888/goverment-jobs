@@ -46,7 +46,7 @@ npm run dev
    - `NODE_ENV=production`
    - `MONGODB_URI=<your-mongodb-atlas-uri>`
    - `OPENAI_API_KEY=<your-openai-key>`
-   - `YOUTUBE_API_KEY=AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY`
+   - `YOUTUBE_API_KEY=your_youtube_api_key_here`
 6. Click **"Create Web Service"**
 
 Your backend will be deployed at: `https://your-app-name.onrender.com`
@@ -116,7 +116,7 @@ JWT_SECRET=your-secret-key-here
 ### Get API Keys:
 - **OpenAI**: https://platform.openai.com/api-keys (Paid)
 - **Gemini**: https://makersuite.google.com/app/apikey (Free tier available)
-- **YouTube**: Already provided (AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY)
+- **YouTube**: Get from Google Cloud Console
 
 ## 🚀 Testing the Complete Setup
 

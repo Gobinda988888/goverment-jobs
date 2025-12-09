@@ -66,7 +66,7 @@ Add these 6 variables:
 2. □ `PORT` = `5000`
 3. □ `FIREBASE_SERVICE_ACCOUNT` = `{paste JSON from Step 1}`
 4. □ `GEMINI_API_KEY` = `{paste key from Step 2}`
-5. □ `YOUTUBE_API_KEY` = `AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY`
+5. □ `YOUTUBE_API_KEY` = `{your YouTube API key}`
 6. □ `JWT_SECRET` = `odisha_jobs_secret_2025`
 
 ---

@@ -15,7 +15,7 @@ services:
       - key: OPENAI_API_KEY
         sync: false  # Set this in Render dashboard
       - key: YOUTUBE_API_KEY
-        value: AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY
+        value: your_youtube_api_key_here
       - key: JWT_SECRET
         generateValue: true
       - key: FIREBASE_SERVICE_ACCOUNT
