@@ -1,33 +1,25 @@
-const mongoose = require('mongoose');
+// Firestore (Firebase Database) - No connection needed
+// Firebase is initialized in config/firebase.js
 const logger = require('../utils/logger');
+const { db } = require('./firebase');
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+    // Test Firestore connection
+    const testRef = db.collection('_test');
+    await testRef.doc('connection').set({
+      connected: true,
+      timestamp: new Date()
     });
-
-    logger.info(`MongoDB Connected: ${conn.connection.host}`);
     
-    // Handle connection events
-    mongoose.connection.on('error', (err) => {
-      logger.error(`MongoDB connection error: ${err}`);
-    });
-
-    mongoose.connection.on('disconnected', () => {
-      logger.warn('MongoDB disconnected');
-    });
-
-    process.on('SIGINT', async () => {
-      await mongoose.connection.close();
-      logger.info('MongoDB connection closed through app termination');
-      process.exit(0);
-    });
-
+    logger.info('✅ Firebase Firestore Connected Successfully');
+    
+    // Clean up test document
+    await testRef.doc('connection').delete();
+    
   } catch (error) {
-    logger.error(`Error connecting to MongoDB: ${error.message}`);
-    process.exit(1);
+    logger.error(`❌ Error connecting to Firestore: ${error.message}`);
+    logger.warn('⚠️ Continuing without database connection - add FIREBASE_SERVICE_ACCOUNT to environment');
   }
 };
 

@@ -1,4 +1,4 @@
-const Job = require('../models/Job');
+const Job = require('../models/JobFirestore'); // Changed to Firestore model
 const aiService = require('../services/aiService');
 const youtubeService = require('../services/youtubeService');
 const logger = require('../utils/logger');
@@ -13,26 +13,16 @@ exports.getAllJobs = async (req, res, next) => {
       page = 1,
       limit = 10,
       status,
-      category,
-      sortBy = 'postedDate',
-      order = 'desc'
+      category
     } = req.query;
 
-    const query = {};
-    
-    if (status) query.status = status;
-    if (category) query.category = category;
+    const filters = {};
+    if (status) filters.status = status;
+    if (category) filters.category = category;
+    filters.limit = parseInt(limit);
 
-    const skip = (page - 1) * limit;
-    const sortOrder = order === 'asc' ? 1 : -1;
-
-    const jobs = await Job.find(query)
-      .sort({ [sortBy]: sortOrder })
-      .skip(skip)
-      .limit(parseInt(limit))
-      .select('-notificationText'); // Exclude large text field
-
-    const total = await Job.countDocuments(query);
+    const jobs = await Job.find(filters);
+    const total = await Job.countDocuments(filters);
 
     res.json({
       success: true,
@@ -54,7 +44,7 @@ exports.getAllJobs = async (req, res, next) => {
 exports.getFeaturedJobs = async (req, res, next) => {
   try {
     const limit = parseInt(req.query.limit) || 5;
-    const jobs = await Job.getFeaturedJobs(limit);
+    const jobs = await Job.getFeatured(limit);
 
     res.json({
       success: true,
@@ -162,24 +152,23 @@ exports.createJob = async (req, res, next) => {
 
     // Process with AI in background
     try {
-      const aiSummary = await aiService.processJobNotification(job.notificationText);
-      job.aiSummary = aiSummary;
-      job.isAIProcessed = true;
-
-      // Generate tags from AI summary
-      job.tags = aiService.generateTags(job.title, aiSummary);
-
-      await job.save();
-
+      const aiSummary = await aiService.processJobNotification(job.notificationText || job.title);
+      
       // Fetch YouTube videos
       const searchQuery = `${job.title} Odisha exam preparation`;
       const videos = await youtubeService.searchVideos(searchQuery);
-      job.youtubeVideos = videos;
-      await job.save();
+      
+      // Update job with AI data and videos
+      job = await Job.findByIdAndUpdate(job.id, {
+        aiSummary,
+        youtubeVideos: videos,
+        isAIProcessed: true,
+        tags: aiService.generateTags(job.title, aiSummary)
+      });
 
-      logger.info(`Job created and processed with AI: ${job._id}`);
+      logger.info(`Job created and processed with AI: ${job.id}`);
     } catch (aiError) {
-      logger.error(`AI processing failed for job ${job._id}: ${aiError.message}`);
+      logger.error(`AI processing failed for job ${job.id}: ${aiError.message}`);
       // Job is still created, just without AI data
     }
 
