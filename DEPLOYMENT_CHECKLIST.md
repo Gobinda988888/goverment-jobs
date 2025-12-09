@@ -65,9 +65,9 @@ Add these 6 variables:
 1. □ `NODE_ENV` = `production`
 2. □ `PORT` = `5000`
 3. □ `FIREBASE_SERVICE_ACCOUNT` = `{paste JSON from Step 1}`
-4. □ `YOUTUBE_API_KEY` = `AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY`
-5. □ `JWT_SECRET` = `odisha_jobs_secret_2025`
-6. □ `GEMINI_API_KEY` = `{paste key from Step 2}`
+4. □ `GEMINI_API_KEY` = `{paste key from Step 2}`
+5. □ `YOUTUBE_API_KEY` = `AIzaSyDzLjA46B4MOnXh2G6vUFNpJzir-LDnkyY`
+6. □ `JWT_SECRET` = `odisha_jobs_secret_2025`
 
 ---
 
