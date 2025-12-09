@@ -1,0 +1,84 @@
+const express = require('express');
+const router = express.Router();
+const jobController = require('../controllers/jobController');
+const { validateJob, validateJobId } = require('../middleware/validation');
+const auth = require('../middleware/auth');
+
+/**
+ * @route   GET /api/jobs
+ * @desc    Get all jobs with filtering, pagination, and search
+ * @access  Public
+ */
+router.get('/', jobController.getAllJobs);
+
+/**
+ * @route   GET /api/jobs/featured
+ * @desc    Get featured jobs
+ * @access  Public
+ */
+router.get('/featured', jobController.getFeaturedJobs);
+
+/**
+ * @route   GET /api/jobs/search
+ * @desc    Search jobs
+ * @access  Public
+ */
+router.get('/search', jobController.searchJobs);
+
+/**
+ * @route   GET /api/jobs/:id
+ * @desc    Get single job by ID
+ * @access  Public
+ */
+router.get('/:id', validateJobId, jobController.getJobById);
+
+/**
+ * @route   GET /api/jobs/:id/resources
+ * @desc    Get YouTube resources for a job
+ * @access  Public
+ */
+router.get('/:id/resources', validateJobId, jobController.getJobResources);
+
+/**
+ * @route   POST /api/jobs
+ * @desc    Create new job (with AI processing)
+ * @access  Private (Admin only)
+ */
+router.post('/', auth, validateJob, jobController.createJob);
+
+/**
+ * @route   PUT /api/jobs/:id
+ * @desc    Update job
+ * @access  Private (Admin only)
+ */
+router.put('/:id', auth, validateJobId, jobController.updateJob);
+
+/**
+ * @route   DELETE /api/jobs/:id
+ * @desc    Delete job
+ * @access  Private (Admin only)
+ */
+router.delete('/:id', auth, validateJobId, jobController.deleteJob);
+
+/**
+ * @route   POST /api/jobs/:id/process-ai
+ * @desc    Manually trigger AI processing for a job
+ * @access  Private (Admin only)
+ */
+router.post('/:id/process-ai', auth, validateJobId, jobController.processJobWithAI);
+
+/**
+ * @route   POST /api/jobs/:id/fetch-videos
+ * @desc    Manually fetch YouTube videos for a job
+ * @access  Private (Admin only)
+ */
+router.post('/:id/fetch-videos', auth, validateJobId, jobController.fetchYouTubeVideos);
+
+/**
+ * @route   PATCH /api/jobs/:id/view
+ * @desc    Increment view count
+ * @access  Public
+ */
+router.patch('/:id/view', validateJobId, jobController.incrementView);
+
+module.exports = router;
