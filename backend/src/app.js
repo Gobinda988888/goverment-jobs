@@ -11,6 +11,7 @@ const { errorHandler, notFoundHandler } = require('./utils/errorHandler');
 
 // Import routes
 const jobRoutes = require('./routes/jobRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 // Initialize Express app
 const app = express();
@@ -57,6 +58,7 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/jobs', jobRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -66,6 +68,7 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     endpoints: {
       jobs: '/api/jobs',
+      upload: '/api/upload',
       health: '/health'
     }
   });
