@@ -6,19 +6,21 @@ import '../models/job.dart';
 class ApiService {
   static late Dio _dio;
   static const String baseUrl =
-      'http://10.0.2.2:5000/api'; // Android emulator: 10.0.2.2, Production: your-domain.com/api
+      'https://goverment-jobs.onrender.com/api'; // Production backend URL
 
   /// Initialize Dio client
   static Future<void> initialize() async {
-    _dio = Dio(BaseOptions(
-      baseUrl: baseUrl,
-      connectTimeout: const Duration(seconds: 30),
-      receiveTimeout: const Duration(seconds: 30),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    ));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      ),
+    );
 
     // Add logging interceptor in debug mode
     _dio.interceptors.add(
@@ -62,10 +64,7 @@ class ApiService {
         if (order != null) 'order': order,
       };
 
-      final response = await _dio.get(
-        '/jobs',
-        queryParameters: queryParams,
-      );
+      final response = await _dio.get('/jobs', queryParameters: queryParams);
 
       return JobsResponse.fromJson(response.data);
     } catch (e) {
