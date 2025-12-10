@@ -1,14 +1,12 @@
-const { OpenAI } = require('openai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const logger = require('../utils/logger');
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+// Initialize Google Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 /**
  * AI Service for processing job notifications
- * This service uses GPT-4 to extract structured information from job notifications
+ * This service uses Google Gemini to extract structured information from job notifications
  */
 
 class AIService {
@@ -21,30 +19,34 @@ class AIService {
     try {
       const prompt = this.buildPrompt(notificationText);
       
-      const response = await openai.chat.completions.create({
-        model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an expert in analyzing Indian government job notifications, specifically for Odisha state. Extract all relevant information accurately and format it as JSON.'
-          },
-          {
-            role: 'user',
-            content: prompt
-          }
-        ],
-        temperature: 0.3, // Lower temperature for more consistent outputs
-        response_format: { type: "json_object" }
+      const model = genAI.getGenerativeModel({ 
+        model: 'gemini-pro',
+        generationConfig: {
+          temperature: 0.3,
+          topK: 1,
+          topP: 0.95,
+          maxOutputTokens: 2048,
+        }
       });
 
-      const aiResponse = response.choices[0].message.content;
-      const parsedResponse = JSON.parse(aiResponse);
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      
+      // Extract JSON from response
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        logger.error('Failed to extract JSON from Gemini response');
+        throw new Error('Invalid AI response format');
+      }
+      
+      const parsedResponse = JSON.parse(jsonMatch[0]);
 
-      logger.info('AI processing completed successfully');
+      logger.info('Gemini AI processing completed successfully');
       return this.formatAIResponse(parsedResponse);
 
     } catch (error) {
-      logger.error(`AI processing error: ${error.message}`);
+      logger.error(`Gemini AI processing error: ${error.message}`);
       throw new Error(`AI processing failed: ${error.message}`);
     }
   }
@@ -192,28 +194,105 @@ ${notificationText}
   }
 
   /**
-   * Alternative: Process with Google Gemini
-   * Uncomment if using Gemini instead of OpenAI
+   * Find YouTube videos using Gemini AI (No YouTube API needed!)
+   * Gemini suggests relevant search terms and video topics
    */
-  /*
-  async processWithGemini(notificationText) {
-    const { GoogleGenerativeAI } = require('@google/generative-ai');
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  async findYouTubeResources(jobTitle, jobSummary) {
+    try {
+      const prompt = `
+You are helping students prepare for the following government job exam in Odisha, India:
 
-    const prompt = this.buildPrompt(notificationText);
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
-    
-    // Extract JSON from response
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error('Failed to extract JSON from Gemini response');
-    
-    const parsedResponse = JSON.parse(jsonMatch[0]);
-    return this.formatAIResponse(parsedResponse);
+Job Title: ${jobTitle}
+Job Summary: ${jobSummary || 'Government job opportunity in Odisha'}
+
+Your task is to suggest 5-7 relevant YouTube search queries that students should use to find helpful preparation videos.
+
+Consider:
+1. Exam name and pattern
+2. Syllabus topics
+3. Previous year papers
+4. Study tips and strategies
+5. Subject-wise preparation (if applicable)
+6. Odisha-specific content
+
+Return ONLY a JSON array of search queries in this exact format:
+{
+  "searchQueries": [
+    "OPSC exam preparation 2024",
+    "Odisha government job syllabus",
+    "Previous year question papers analysis"
+  ],
+  "examType": "Type of exam (e.g., OPSC, Police, Teacher, etc.)",
+  "mainSubjects": ["Subject 1", "Subject 2", "Subject 3"]
+}
+
+Be specific to Odisha government exams. Include Hindi and English search terms if helpful.
+`;
+
+      const model = genAI.getGenerativeModel({ 
+        model: 'gemini-pro',
+        generationConfig: {
+          temperature: 0.7,
+          topK: 3,
+          topP: 0.9,
+          maxOutputTokens: 1024,
+        }
+      });
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+      
+      // Extract JSON from response
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        logger.warn('Could not extract YouTube resources from Gemini');
+        return this.getDefaultYouTubeQueries(jobTitle);
+      }
+      
+      const suggestedResources = JSON.parse(jsonMatch[0]);
+      
+      logger.info(`Generated ${suggestedResources.searchQueries?.length || 0} YouTube search queries using Gemini`);
+      
+      return {
+        searchQueries: suggestedResources.searchQueries || this.getDefaultYouTubeQueries(jobTitle).searchQueries,
+        examType: suggestedResources.examType || 'Government Job',
+        mainSubjects: suggestedResources.mainSubjects || [],
+        youtubeSearchLinks: (suggestedResources.searchQueries || []).map(query => ({
+          query: query,
+          url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
+        }))
+      };
+
+    } catch (error) {
+      logger.error(`Error finding YouTube resources with Gemini: ${error.message}`);
+      return this.getDefaultYouTubeQueries(jobTitle);
+    }
   }
-  */
+
+  /**
+   * Fallback YouTube queries if Gemini fails
+   */
+  getDefaultYouTubeQueries(jobTitle) {
+    const baseQueries = [
+      `${jobTitle} preparation`,
+      `${jobTitle} syllabus`,
+      `${jobTitle} previous year papers`,
+      'Odisha government job preparation',
+      'OPSC exam tips'
+    ];
+
+    return {
+      searchQueries: baseQueries,
+      examType: 'Government Job',
+      mainSubjects: [],
+      youtubeSearchLinks: baseQueries.map(query => ({
+        query: query,
+        url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`
+      }))
+    };
+  }
+
 }
 
 module.exports = new AIService();
